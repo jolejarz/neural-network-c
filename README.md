@@ -4,7 +4,7 @@ This repository contains a library for building and training artificial neural n
 
 # License and Copyright
 
-All files in this repository are released under the [GNU General Public License, Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) as per the included [license](https://github.com/jolejarz/neural-network-c/LICENSE.txt) and [copyright](https://github.com/jolejarz/neural-network-c/COPYRIGHT.txt) files.
+All files in this repository are released under the [GNU General Public License, Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) as per the included [license](https://github.com/jolejarz/neural-network-c/blob/main/LICENSE.txt) and [copyright](https://github.com/jolejarz/neural-network-c/blob/main/COPYRIGHT.txt) files.
 
 # Examples
 
