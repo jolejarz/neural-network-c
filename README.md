@@ -1,6 +1,6 @@
 # Artificial Neural Network Library for C
 
-This repository contains a library for building and training artificial neural networks (**annl.c**). The library is written in ANSI C and is designed as a simple, general, and fast platform for supervised machine learning for C programmers. It is a work in progress.
+This repository contains a library for building and training artificial neural networks (**annl.c**). The library is written in C and is designed as a platform for supervised machine learning for C programmers. It is a work in progress.
 
 # License and Copyright
 
