@@ -6,6 +6,21 @@ This repository contains a library for building and training artificial neural n
 
 All files in this repository are released under the [GNU General Public License, Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) as per the included [license](https://github.com/jolejarz/neural-network-c/blob/main/LICENSE.txt) and [copyright](https://github.com/jolejarz/neural-network-c/blob/main/COPYRIGHT.txt) files.
 
+# Files
+
+The library is contained in the following source files. The functions that are included in each file are briefly described.
+
+* **activation.c**: Setting Activation Functions
+* **bias.c**: Setting Bias Parameters
+* **connection.c**: Connecting Layers and Setting Weight Parameters
+* **gradient.c**: Calculating the Gradient of the Loss Function with Respect to the Weight and Bias Parameters
+* **integration.c**: Performing Gradient Descent
+* **layer.c**: Creating Layers
+* **loss.c**: Calculating the Loss Function
+* **output.c**: Calculating the Set of Outputs for a Given Set of Inputs
+* **randomization.c**: Randomizing the Weight and Bias Parameters Before Training Begins
+* **sequence.c**: Setting the Execution Sequence for Calculating the Outputs
+
 # Examples
 
 Several examples demonstrating the use of the library have been completed.
