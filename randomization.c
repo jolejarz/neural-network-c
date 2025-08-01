@@ -30,7 +30,7 @@ void annlRandomizeParameters (annlLayer *layer_current, gsl_rng *rng)
 	return;
 }
 
-void annlRandomizeParametersLeNet (annlLayer *layer_current, gsl_rng *rng)
+void annlRandomizeParametersConvolution (annlLayer *layer_current, gsl_rng *rng)
 {
 	// Randomize the weight parameters.
 	for (int layer_w_index=0; layer_w_index<layer_current->num_layer_w; layer_w_index++)
