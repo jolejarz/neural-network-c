@@ -399,10 +399,10 @@ int main (int argc, char *argv[])
 	annlLinkSequence (layer_7, layer_output);
 
 	// Set up the biases.
-	annlSetBiasLeNet (layer_2, 28, 6, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_3, 14, 6, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_4, 10, 16, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_5, 5, 16, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_2, 28, 6, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_3, 14, 6, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_4, 10, 16, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_5, 5, 16, TRAIN_ADAM);
 	annlSetBiasFull (layer_6, TRAIN_ADAM);
 	annlSetBiasFull (layer_7, TRAIN_ADAM);
 	annlSetBiasFull (layer_output, TRAIN_ADAM);
@@ -424,10 +424,10 @@ int main (int argc, char *argv[])
 	annlConnectFull (layer_7, layer_output, TRAIN_ADAM);
 
 	// Set the initial weights and biases.
-	annlRandomizeParametersLeNet (layer_2, rng_mt);
-	annlRandomizeParametersLeNet (layer_3, rng_mt);
-	annlRandomizeParametersLeNet (layer_4, rng_mt);
-	annlRandomizeParametersLeNet (layer_5, rng_mt);
+	annlRandomizeParametersConvolution (layer_2, rng_mt);
+	annlRandomizeParametersConvolution (layer_3, rng_mt);
+	annlRandomizeParametersConvolution (layer_4, rng_mt);
+	annlRandomizeParametersConvolution (layer_5, rng_mt);
 	annlRandomizeParameters (layer_6, rng_mt);
 	annlRandomizeParameters (layer_7, rng_mt);
 	annlRandomizeParameters (layer_output, rng_mt);
