@@ -95,18 +95,18 @@ void annlConnectConvolution (annlLayer *layer_previous, annlLayer *layer_current
 	layer_current->layer_w[layer_w_index].w_value = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].dw = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].update_w = 1;
-	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcLeNet_z_w;
-	layer_current->layer_w[layer_w_index].calc_dw = annlCalcLeNet_dw;
-	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcLeNet_dxj;
+	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcConvolution_z_w;
+	layer_current->layer_w[layer_w_index].calc_dw = annlCalcConvolution_dw;
+	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcConvolution_dxj;
 	if (train==TRAIN_ADAM)
 	{
 		layer_current->layer_w[layer_w_index].w_m = calloc (layer_current->size*layer_previous->size, sizeof(double));
 		layer_current->layer_w[layer_w_index].w_v = calloc (layer_current->size*layer_previous->size, sizeof(double));
-		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw_Adam;
+		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw_Adam;
 	}
 	else
 	{
-		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw;
+		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw;
 	}
 	layer_current->layer_w[layer_w_index].w_parameters_trainable = malloc (sizeof(double)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_list_start_trainable = malloc (sizeof(int)*layer_current->size*(layer_previous->size));
@@ -237,10 +237,10 @@ void annlConnectConvolutionExisting_w (annlLayer *layer_previous, annlLayer *lay
 	layer_current->layer_w[layer_w_index].w_value = w;
 	layer_current->layer_w[layer_w_index].dw = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].update_w = 0;
-	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcLeNet_z_w;
-	layer_current->layer_w[layer_w_index].calc_dw = annlCalcLeNet_dw;
-	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcLeNet_dxj;
-	layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw;
+	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcConvolution_z_w;
+	layer_current->layer_w[layer_w_index].calc_dw = annlCalcConvolution_dw;
+	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcConvolution_dxj;
+	layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw;
 	layer_current->layer_w[layer_w_index].w_parameters_trainable = malloc (sizeof(double)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_list_start_trainable = malloc (sizeof(int)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_xj_list_start_trainable = malloc (sizeof(int)*(layer_previous->size));
@@ -370,18 +370,18 @@ void annlConnectPool (annlLayer *layer_previous, annlLayer *layer_current, int L
 	layer_current->layer_w[layer_w_index].w_value = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].dw = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].update_w = 1;
-	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcLeNet_z_w;
-	layer_current->layer_w[layer_w_index].calc_dw = annlCalcLeNet_dw;
-	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcLeNet_dxj;
+	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcConvolution_z_w;
+	layer_current->layer_w[layer_w_index].calc_dw = annlCalcConvolution_dw;
+	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcConvolution_dxj;
 	if (train==TRAIN_ADAM)
 	{
 		layer_current->layer_w[layer_w_index].w_m = calloc (layer_current->size*layer_previous->size, sizeof(double));
 		layer_current->layer_w[layer_w_index].w_v = calloc (layer_current->size*layer_previous->size, sizeof(double));
-		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw_Adam;
+		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw_Adam;
 	}
 	else
 	{
-		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw;
+		layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw;
 	}
 	layer_current->layer_w[layer_w_index].w_parameters_trainable = malloc (sizeof(double)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_list_start_trainable = malloc (sizeof(int)*layer_current->size*(layer_previous->size));
@@ -509,10 +509,10 @@ void annlConnectPoolExisting_w (annlLayer *layer_previous, annlLayer *layer_curr
 	layer_current->layer_w[layer_w_index].w_value = w;
 	layer_current->layer_w[layer_w_index].dw = malloc (sizeof(double)*layer_current->size*layer_previous->size);
 	layer_current->layer_w[layer_w_index].update_w = 0;
-	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcLeNet_z_w;
-	layer_current->layer_w[layer_w_index].calc_dw = annlCalcLeNet_dw;
-	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcLeNet_dxj;
-	layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateLeNet_dw;
+	layer_current->layer_w[layer_w_index].calc_z_w = annlCalcConvolution_z_w;
+	layer_current->layer_w[layer_w_index].calc_dw = annlCalcConvolution_dw;
+	layer_current->layer_w[layer_w_index].calc_dxj = annlCalcConvolution_dxj;
+	layer_current->layer_w[layer_w_index].integrate_dw = annlIntegrateConvolution_dw;
 	layer_current->layer_w[layer_w_index].w_parameters_trainable = malloc (sizeof(double)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_list_start_trainable = malloc (sizeof(int)*layer_current->size*(layer_previous->size));
 	layer_current->layer_w[layer_w_index].wij_xj_list_start_trainable = malloc (sizeof(int)*(layer_previous->size));
