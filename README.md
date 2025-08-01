@@ -21,6 +21,82 @@ The library is contained in the following source files. The functions that are i
 * **randomization.c**: Randomizing the Weight and Bias Parameters Before Training Begins
 * **sequence.c**: Setting the Execution Sequence for Calculating the Outputs
 
+# Functions
+
+The API consists of the following functions.
+
+## Activation Functions
+
+```
+void annlActivateLogistic (annlLayer *layer_current, int derivative)
+```
+
+This is the logistic activation function. `annlLayer *layer_current` is the layer that the activation is applied to. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the activation function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the activation function with respect to its argument is returned.
+
+```
+void annlActivateReLU (annlLayer *layer_current, int derivative)
+```
+
+This is the rectified linear unit activation function. `annlLayer *layer_current` is the layer that the activation is applied to. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the activation function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the activation function with respect to its argument is returned.
+
+```
+void annlActivateSoftmax (annlLayer *layer_current, int derivative)
+```
+
+This is the softmax activation function. `annlLayer *layer_current` is the layer that the activation is applied to. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the activation function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the activation function with respect to its argument is returned.
+
+```
+void annlActivateTanh (annlLayer *layer_current, int derivative)
+```
+
+This is the hyperbolic tangent activation function. `annlLayer *layer_current` is the layer that the activation is applied to. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the activation function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the activation function with respect to its argument is returned.
+
+```
+int annlHeavisideTheta (double x)
+```
+
+This is the Heaviside step function. It returns 1 if `double x` is greater than 0, and it returns 0 otherwise.
+
+## Bias Functions
+
+```
+void annlSetBiasFull (annlLayer *layer_current, int train)
+```
+
+This function sets up the bias parameters for the fully connected layer `annlLayer *layer_current`. `int train` is set to TRAIN_BASIC for basic gradient descent or TRAIN_ADAM for the Adam optimizer.
+
+```
+void annlSetBiasFullExisting (annlLayer *layer_current, double *b, double *db)
+```
+
+This function sets up the bias parameters for the fully connected layer `annlLayer *layer_current`. It is used for building recurrent networks, where, after the network is unfolded in time, `annlLayer *layer_current` represents a subsequent instance of a layer that was previously set up. `double b` and `double db` are the vectors of bias parameters and their gradients, respectively, from the corresponding existing layer.
+
+```
+void annlSetBiasFullExisting_b (annlLayer *layer_current, double *b)
+```
+
+This function sets up the bias parameters for the fully connected layer `annlLayer *layer_current`. It is used for multithreaded parallelization. `double b` is the vector of bias parameters from the corresponding existing layer in an execution sequence that was previously set up.
+
+```
+void annlSetBiasConvolution (annlLayer *layer_current, int L, int n, int train)
+```
+
+This function sets up the bias parameters for the convolutional layer `annlLayer *layer_current`. `int L` is the linear size of the square grid of units, and `int n` is the number of feature maps. `int train` is set to TRAIN_BASIC for basic gradient descent or TRAIN_ADAM for the Adam optimizer.
+
+```
+void annlSetBiasConvolutionExisting_b (annlLayer *layer_current, int L, int n, double *b)
+```
+
+This function sets up the bias parameters for the convolutional layer `annlLayer *layer_current`. It is used for multithreaded parallelization. `double b` is the vector of bias parameters from the corresponding existing layer in an execution sequence that was previously set up. `int L` is the linear size of the square grid of units, and `int n` is the number of feature maps.
+
+## Layer Functions
+
+```
+annlLayer* annlCreateLayer (int size, int num_layer_w, void (*activation)(annlLayer*,int))
+```
+
+This function creates a new layer and returns a pointer to the corresponding layer structure. `int size` is the number of units in the layer, `int num_layer_w` is the number of layers that the new layer will be connected to via weight parameters, and `void (*activation)(annlLayer*,int)` is a pointer to an activation function.
+
 # Examples
 
 Several examples demonstrating the use of the library have been completed.
