@@ -10,7 +10,7 @@ void annlCalcFull_z_b (annlLayer *layer_current)
 	return;
 }
 
-void annlCalcLeNet_z_b (annlLayer *layer_current)
+void annlCalcConvolution_z_b (annlLayer *layer_current)
 {
 	for (int k=0; k<layer_current->b_xi_num; k++)
 	{
@@ -51,7 +51,7 @@ void annlCalcFull_z_w (annlLayer *layer_current, int layer_w_index)
 	return;
 }
 
-void annlCalcLeNet_z_w (annlLayer *layer_current, int layer_w_index)
+void annlCalcConvolution_z_w (annlLayer *layer_current, int layer_w_index)
 {
 	annlLayer *layer_previous = layer_current->layer_w[layer_w_index].layer;
 
