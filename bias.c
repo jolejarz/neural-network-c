@@ -67,7 +67,7 @@ void annlSetBiasFullExisting_b (annlLayer *layer_current, double *b)
 	return;
 }
 
-void annlSetBiasLeNet (annlLayer *layer_current, int L, int n, int train)
+void annlSetBiasConvolution (annlLayer *layer_current, int L, int n, int train)
 {
 	// Set the total number of bias parameters.
 	layer_current->b_num = n;
@@ -75,17 +75,17 @@ void annlSetBiasLeNet (annlLayer *layer_current, int L, int n, int train)
 	layer_current->b_value = malloc (sizeof(double)*layer_current->size);
 	layer_current->db = malloc (sizeof(double)*layer_current->size);
 	layer_current->update_b = 1;
-	layer_current->calc_z_b = annlCalcLeNet_z_b;
-	layer_current->calc_db = annlCalcLeNet_db;
+	layer_current->calc_z_b = annlCalcConvolution_z_b;
+	layer_current->calc_db = annlCalcConvolution_db;
 	if (train==TRAIN_ADAM)
 	{
 		layer_current->b_m = calloc (layer_current->size, sizeof(double));
 		layer_current->b_v = calloc (layer_current->size, sizeof(double));
-		layer_current->integrate_db = annlIntegrateLeNet_db_Adam;
+		layer_current->integrate_db = annlIntegrateConvolution_db_Adam;
 	}
 	else
 	{
-		layer_current->integrate_db = annlIntegrateLeNet_db;
+		layer_current->integrate_db = annlIntegrateConvolution_db;
 	}
 	layer_current->b_parameters_trainable = malloc (sizeof(double)*layer_current->size);
 	layer_current->bi_list_start_trainable = malloc (sizeof(int)*layer_current->size);
@@ -167,7 +167,7 @@ void annlSetBiasLeNet (annlLayer *layer_current, int L, int n, int train)
 	return;
 }
 
-void annlSetBiasLeNetExisting_b (annlLayer *layer_current, int L, int n, double *b)
+void annlSetBiasConvolutionExisting_b (annlLayer *layer_current, int L, int n, double *b)
 {
 	// Set the total number of bias parameters.
 	layer_current->b_num = n;
@@ -175,9 +175,9 @@ void annlSetBiasLeNetExisting_b (annlLayer *layer_current, int L, int n, double 
 	layer_current->b_value = b;
 	layer_current->db = malloc (sizeof(double)*layer_current->size);
 	layer_current->update_b = 0;
-	layer_current->calc_z_b = annlCalcLeNet_z_b;
-	layer_current->calc_db = annlCalcLeNet_db;
-	layer_current->integrate_db = annlIntegrateLeNet_db;
+	layer_current->calc_z_b = annlCalcConvolution_z_b;
+	layer_current->calc_db = annlCalcConvolution_db;
+	layer_current->integrate_db = annlIntegrateConvolution_db;
 	layer_current->b_parameters_trainable = malloc (sizeof(double)*layer_current->size);
 	layer_current->bi_list_start_trainable = malloc (sizeof(int)*layer_current->size);
 	layer_current->bi_xi_list_start_trainable = malloc (sizeof(int)*layer_current->size);
