@@ -48,7 +48,7 @@ void annlCalcFull_dxj (annlLayer *layer_current, int layer_w_index)
 	return;
 }
 
-void annlCalcLeNet_db (annlLayer *layer_current)
+void annlCalcConvolution_db (annlLayer *layer_current)
 {
 	for (int k=0; k<layer_current->b_num; k++)
 	{
@@ -71,7 +71,7 @@ void annlCalcLeNet_db (annlLayer *layer_current)
 	return;
 }
 
-void annlCalcLeNet_dw (annlLayer *layer_current, int layer_w_index)
+void annlCalcConvolution_dw (annlLayer *layer_current, int layer_w_index)
 {
 	annlLayer *layer_previous = layer_current->layer_w[layer_w_index].layer;
 
@@ -97,7 +97,7 @@ void annlCalcLeNet_dw (annlLayer *layer_current, int layer_w_index)
 	return;
 }
 
-void annlCalcLeNet_dxj (annlLayer *layer_current, int layer_w_index)
+void annlCalcConvolution_dxj (annlLayer *layer_current, int layer_w_index)
 {
 	annlLayer *layer_previous = layer_current->layer_w[layer_w_index].layer;
 
