@@ -145,8 +145,8 @@ int annlHeavisideTheta (double x);
 void annlSetBiasFull (annlLayer *layer_current, int train);
 void annlSetBiasFullExisting (annlLayer *layer_current, double *b, double *db);
 void annlSetBiasFullExisting_b (annlLayer *layer_current, double *b);
-void annlSetBiasLeNet (annlLayer *layer_current, int L, int n, int train);
-void annlSetBiasLeNetExisting_b (annlLayer *layer_current, int L, int n, double *b);
+void annlSetBiasConvolution (annlLayer *layer_current, int L, int n, int train);
+void annlSetBiasConvolutionExisting_b (annlLayer *layer_current, int L, int n, double *b);
 
 // connection.c
 void annlConnectFull (annlLayer *layer_previous, annlLayer *layer_current, int train);
@@ -161,21 +161,21 @@ void annlConnectPoolExisting_w (annlLayer *layer_previous, annlLayer *layer_curr
 void annlCalcFull_db (annlLayer *layer_current);
 void annlCalcFull_dw (annlLayer *layer_current, int layer_w_index);
 void annlCalcFull_dxj (annlLayer *layer_current, int layer_w_index);
-void annlCalcLeNet_db (annlLayer *layer_current);
-void annlCalcLeNet_dw (annlLayer *layer_current, int layer_w_index);
-void annlCalcLeNet_dxj (annlLayer *layer_current, int layer_w_index);
+void annlCalcConvolution_db (annlLayer *layer_current);
+void annlCalcConvolution_dw (annlLayer *layer_current, int layer_w_index);
+void annlCalcConvolution_dxj (annlLayer *layer_current, int layer_w_index);
 annlLayer* annlCalculateGradient (annlSequence sequence);
 annlLayer* annlCalculateGradient_omp (annlSequence sequence);
 
 // integration.c
 void annlIntegrateFull_db (annlLayer *layer_current, double step);
 void annlIntegrateFull_db_Adam (annlLayer *layer_current, double step);
-void annlIntegrateLeNet_db (annlLayer *layer_current, double step);
-void annlIntegrateLeNet_db_Adam (annlLayer *layer_current, double step);
+void annlIntegrateConvolution_db (annlLayer *layer_current, double step);
+void annlIntegrateConvolution_db_Adam (annlLayer *layer_current, double step);
 void annlIntegrateFull_dw (annlLayer *layer_current, int layer_w_index, double step);
 void annlIntegrateFull_dw_Adam (annlLayer *layer_current, int layer_w_index, double step);
-void annlIntegrateLeNet_dw (annlLayer *layer_current, int layer_w_index, double step);
-void annlIntegrateLeNet_dw_Adam (annlLayer *layer_current, int layer_w_index, double step);
+void annlIntegrateConvolution_dw (annlLayer *layer_current, int layer_w_index, double step);
+void annlIntegrateConvolution_dw_Adam (annlLayer *layer_current, int layer_w_index, double step);
 void annlUpdateParameters (annlLayer *layer_input, double step);
 void annlUpdateParameters_omp (annlSequence sequence, double step);
 
@@ -189,14 +189,14 @@ double annlCalculateLossTotal_omp (annlSequence sequence);
 
 // output.c
 void annlCalcFull_z_b (annlLayer *layer_current);
-void annlCalcLeNet_z_b (annlLayer *layer_current);
+void annlCalcConvolution_z_b (annlLayer *layer_current);
 void annlCalcFull_z_w (annlLayer *layer_current, int layer_w_index);
-void annlCalcLeNet_z_w (annlLayer *layer_current, int layer_w_index);
+void annlCalcConvolution_z_w (annlLayer *layer_current, int layer_w_index);
 annlLayer* annlCalculateOutput (annlLayer *layer_input);
 
 // randomization.c
 void annlRandomizeParameters (annlLayer *layer_current, gsl_rng *rng);
-void annlRandomizeParametersLeNet (annlLayer *layer_current, gsl_rng *rng);
+void annlRandomizeParametersConvolution (annlLayer *layer_current, gsl_rng *rng);
 
 // sequence.c
 void annlLinkSequence (annlLayer *layer_previous, annlLayer *layer_next);
