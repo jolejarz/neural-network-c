@@ -413,19 +413,19 @@ int main (int argc, char *argv[])
 	}
 
 	// Set up the biases.
-	annlSetBiasLeNet (layer_2[0], 28, 6, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_3[0], 14, 6, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_4[0], 10, 16, TRAIN_ADAM);
-	annlSetBiasLeNet (layer_5[0], 5, 16, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_2[0], 28, 6, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_3[0], 14, 6, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_4[0], 10, 16, TRAIN_ADAM);
+	annlSetBiasConvolution (layer_5[0], 5, 16, TRAIN_ADAM);
 	annlSetBiasFull (layer_6[0], TRAIN_ADAM);
 	annlSetBiasFull (layer_7[0], TRAIN_ADAM);
 	annlSetBiasFull (layer_output[0], TRAIN_ADAM);
 	for (i=1; i<NUM; i++)
 	{
-		annlSetBiasLeNetExisting_b (layer_2[i], 28, 6, layer_2[0]->b_value);
-		annlSetBiasLeNetExisting_b (layer_3[i], 14, 6, layer_3[0]->b_value);
-		annlSetBiasLeNetExisting_b (layer_4[i], 10, 16, layer_4[0]->b_value);
-		annlSetBiasLeNetExisting_b (layer_5[i], 5, 16, layer_5[0]->b_value);
+		annlSetBiasConvolutionExisting_b (layer_2[i], 28, 6, layer_2[0]->b_value);
+		annlSetBiasConvolutionExisting_b (layer_3[i], 14, 6, layer_3[0]->b_value);
+		annlSetBiasConvolutionExisting_b (layer_4[i], 10, 16, layer_4[0]->b_value);
+		annlSetBiasConvolutionExisting_b (layer_5[i], 5, 16, layer_5[0]->b_value);
 		annlSetBiasFullExisting_b (layer_6[i], layer_6[0]->b);
 		annlSetBiasFullExisting_b (layer_7[i], layer_7[0]->b);
 		annlSetBiasFullExisting_b (layer_output[i], layer_output[0]->b);
@@ -458,10 +458,10 @@ int main (int argc, char *argv[])
 	}
 
 	// Set the initial weights and biases.
-	annlRandomizeParametersLeNet (layer_2[0], rng_mt);
-	annlRandomizeParametersLeNet (layer_3[0], rng_mt);
-	annlRandomizeParametersLeNet (layer_4[0], rng_mt);
-	annlRandomizeParametersLeNet (layer_5[0], rng_mt);
+	annlRandomizeParametersConvolution (layer_2[0], rng_mt);
+	annlRandomizeParametersConvolution (layer_3[0], rng_mt);
+	annlRandomizeParametersConvolution (layer_4[0], rng_mt);
+	annlRandomizeParametersConvolution (layer_5[0], rng_mt);
 	annlRandomizeParameters (layer_6[0], rng_mt);
 	annlRandomizeParameters (layer_7[0], rng_mt);
 	annlRandomizeParameters (layer_output[0], rng_mt);
