@@ -26,7 +26,7 @@ void annlIntegrateFull_db_Adam (annlLayer *layer_current, double step)
 	return;
 }
 
-void annlIntegrateLeNet_db (annlLayer *layer_current, double step)
+void annlIntegrateConvolution_db (annlLayer *layer_current, double step)
 {
 	for (int k=0; k<layer_current->b_num; k++)
 	{
@@ -36,7 +36,7 @@ void annlIntegrateLeNet_db (annlLayer *layer_current, double step)
 	return;
 }
 
-void annlIntegrateLeNet_db_Adam (annlLayer *layer_current, double step)
+void annlIntegrateConvolution_db_Adam (annlLayer *layer_current, double step)
 {
 	const double beta1 = 0.9, beta2 = 0.999, epsilon = 0.00000001;
 
@@ -90,7 +90,7 @@ void annlIntegrateFull_dw_Adam (annlLayer *layer_current, int layer_w_index, dou
 	return;
 }
 
-void annlIntegrateLeNet_dw (annlLayer *layer_current, int layer_w_index, double step)
+void annlIntegrateConvolution_dw (annlLayer *layer_current, int layer_w_index, double step)
 {
 	for (int k=0; k<layer_current->layer_w[layer_w_index].w_num; k++)
 	{
@@ -100,7 +100,7 @@ void annlIntegrateLeNet_dw (annlLayer *layer_current, int layer_w_index, double 
 	return;
 }
 
-void annlIntegrateLeNet_dw_Adam (annlLayer *layer_current, int layer_w_index, double step)
+void annlIntegrateConvolution_dw_Adam (annlLayer *layer_current, int layer_w_index, double step)
 {
 	const double beta1 = 0.9, beta2 = 0.999, epsilon = 0.00000001;
 
