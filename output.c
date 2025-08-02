@@ -1,3 +1,38 @@
+annlLayer* annlCalculateOutput (annlLayer *layer_input)
+{
+	int i, j, i_max, j_max, layer_w_index;
+
+	annlLayer *layer_previous = layer_input;
+
+	annlLayer *layer_current = layer_input->layer_next;
+
+	while (layer_current!=NULL)
+	{
+		i_max = layer_current->size;
+
+		for (i=0; i<i_max; i++) layer_current->z[i] = 0;
+
+		layer_previous = layer_current;
+		layer_current = layer_current->layer_next;
+	}
+
+	layer_current = layer_input->layer_next;
+
+	while (layer_current!=NULL)
+	{
+		for (layer_w_index=0; layer_w_index<layer_current->num_layer_w; layer_w_index++) (*(layer_current->layer_w[layer_w_index].calc_z_w))(layer_current,layer_w_index);
+
+		(*(layer_current->calc_z_b))(layer_current);
+
+		(*(layer_current->activation))(layer_current,NO_DERIVATIVE);
+
+		layer_previous = layer_current;
+		layer_current = layer_current->layer_next;
+	}
+
+	return layer_previous;
+}
+
 void annlCalcFull_z_b (annlLayer *layer_current)
 {
 	int i_max = layer_current->size;
@@ -75,39 +110,4 @@ void annlCalcConvolution_z_w (annlLayer *layer_current, int layer_w_index)
 	}
 
 	return;
-}
-
-annlLayer* annlCalculateOutput (annlLayer *layer_input)
-{
-	int i, j, i_max, j_max, layer_w_index;
-
-	annlLayer *layer_previous = layer_input;
-
-	annlLayer *layer_current = layer_input->layer_next;
-
-	while (layer_current!=NULL)
-	{
-		i_max = layer_current->size;
-
-		for (i=0; i<i_max; i++) layer_current->z[i] = 0;
-
-		layer_previous = layer_current;
-		layer_current = layer_current->layer_next;
-	}
-
-	layer_current = layer_input->layer_next;
-
-	while (layer_current!=NULL)
-	{
-		for (layer_w_index=0; layer_w_index<layer_current->num_layer_w; layer_w_index++) (*(layer_current->layer_w[layer_w_index].calc_z_w))(layer_current,layer_w_index);
-
-		(*(layer_current->calc_z_b))(layer_current);
-
-		(*(layer_current->activation))(layer_current,NO_DERIVATIVE);
-
-		layer_previous = layer_current;
-		layer_current = layer_current->layer_next;
-	}
-
-	return layer_previous;
 }
