@@ -158,16 +158,18 @@ void annlConnectPool (annlLayer *layer_previous, annlLayer *layer_current, int L
 void annlConnectPoolExisting_w (annlLayer *layer_previous, annlLayer *layer_current, int L, int n, double *w);
 
 // gradient.c
+void annlCalculateGradient (annlSequence sequence);
+void annlCalculateGradient_omp (annlSequence sequence);
 void annlCalcFull_db (annlLayer *layer_current);
 void annlCalcFull_dw (annlLayer *layer_current, int layer_w_index);
 void annlCalcFull_dxj (annlLayer *layer_current, int layer_w_index);
 void annlCalcConvolution_db (annlLayer *layer_current);
 void annlCalcConvolution_dw (annlLayer *layer_current, int layer_w_index);
 void annlCalcConvolution_dxj (annlLayer *layer_current, int layer_w_index);
-annlLayer* annlCalculateGradient (annlSequence sequence);
-annlLayer* annlCalculateGradient_omp (annlSequence sequence);
 
 // integration.c
+void annlUpdateParameters (annlLayer *layer_input, double step);
+void annlUpdateParameters_omp (annlSequence sequence, double step);
 void annlIntegrateFull_db (annlLayer *layer_current, double step);
 void annlIntegrateFull_db_Adam (annlLayer *layer_current, double step);
 void annlIntegrateConvolution_db (annlLayer *layer_current, double step);
@@ -176,8 +178,6 @@ void annlIntegrateFull_dw (annlLayer *layer_current, int layer_w_index, double s
 void annlIntegrateFull_dw_Adam (annlLayer *layer_current, int layer_w_index, double step);
 void annlIntegrateConvolution_dw (annlLayer *layer_current, int layer_w_index, double step);
 void annlIntegrateConvolution_dw_Adam (annlLayer *layer_current, int layer_w_index, double step);
-void annlUpdateParameters (annlLayer *layer_input, double step);
-void annlUpdateParameters_omp (annlSequence sequence, double step);
 
 // layer.c
 annlLayer* annlCreateLayer (int size, int num_layer_w, void (*activation)(annlLayer*,int));
@@ -188,11 +188,11 @@ double annlCalculateLossTotal (annlSequence sequence);
 double annlCalculateLossTotal_omp (annlSequence sequence);
 
 // output.c
+annlLayer* annlCalculateOutput (annlLayer *layer_input);
 void annlCalcFull_z_b (annlLayer *layer_current);
 void annlCalcConvolution_z_b (annlLayer *layer_current);
 void annlCalcFull_z_w (annlLayer *layer_current, int layer_w_index);
 void annlCalcConvolution_z_w (annlLayer *layer_current, int layer_w_index);
-annlLayer* annlCalculateOutput (annlLayer *layer_input);
 
 // randomization.c
 void annlRandomizeParameters (annlLayer *layer_current, gsl_rng *rng);
