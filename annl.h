@@ -158,7 +158,7 @@ void annlConnectPool (annlLayer *layer_previous, annlLayer *layer_current, int L
 void annlConnectPoolExisting_w (annlLayer *layer_previous, annlLayer *layer_current, int L, int n, double *w);
 
 // gradient.c
-void annlCalculateGradient (annlSequence sequence);
+void annlCalculateGradient (annlSequence sequence, int batch_size, int b[]);
 void annlCalculateGradient_omp (annlSequence sequence);
 void annlCalcFull_db (annlLayer *layer_current);
 void annlCalcFull_dw (annlLayer *layer_current, int layer_w_index);
@@ -200,3 +200,7 @@ void annlRandomizeParametersConvolution (annlLayer *layer_current, gsl_rng *rng)
 
 // sequence.c
 void annlLinkSequence (annlLayer *layer_previous, annlLayer *layer_next);
+
+// training.c
+void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double));
+void annlTrain_omp (annlSequence sequence, double loss_diff, double step, void (*status)(int,double));
