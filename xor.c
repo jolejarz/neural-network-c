@@ -8,7 +8,8 @@
 #include "annl.h"
 
 #define NUM 4
-#define MIDDLE_SIZE 3
+
+void status (int epoch, double loss);
 
 int main (int argc, char *argv[])
 {
@@ -99,26 +100,24 @@ int main (int argc, char *argv[])
 		sequence_output[i].output_target_fit = &list[i][4];
 	}
 
-	int epoch = 0;
-	double loss_test;
-
-	// Check if the total loss is greater than loss_diff.
-	while ( (loss_test=annlCalculateLossTotal (sequence)) > loss_diff )
-	{
-		printf("Epoch = %d, Loss = %lf\n", epoch++, loss_test);
-
-		// Calculate the gradient.
-		annlCalculateGradient (sequence);
-
-		// Update the parameters.
-		annlUpdateParameters (layer_input, step);
-	}
+	// Train the network.
+	annlTrain (sequence, layer_input, loss_diff, 4, NULL, step, status);
 
 	// Print the outputs.
 	for (i=0; i<NUM; i++)
 	{
-		printf ("Input = (%d,%d); θ[Output-1/2] = (%d); Output = (%lf)\n", (int)(*(input_all+2*i+0)), (int)(*(input_all+2*i+1)), annlHeavisideTheta(*(output_all+1*i+0)-0.5), *(output_all+1*i+0));
+		printf ("Input = (%d,%d); θ[Output-1/2] = (%d); Output = (%lf)\n",
+		        (int)(*(input_all+2*i+0)),
+			(int)(*(input_all+2*i+1)),
+			annlHeavisideTheta(*(output_all+1*i+0)-0.5),
+			*(output_all+1*i+0));
 	}
 
 	return 0;
+}
+
+void status (int epoch, double loss)
+{
+	printf("Epoch = %d, Loss = %lf\n", epoch, loss);
+	return;
 }
