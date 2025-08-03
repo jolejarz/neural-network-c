@@ -15,3 +15,4 @@
 #include "output.c"
 #include "randomization.c"
 #include "sequence.c"
+#include "training.c"
