@@ -1,4 +1,4 @@
-void annlCalculateGradient (annlSequence sequence)
+void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
 {
 	int i, j, i_max, j_max, layer_w_index;
 
@@ -6,9 +6,9 @@ void annlCalculateGradient (annlSequence sequence)
 	annlLayer *layer_previous;
 	annlLayer *layer_current;
 
-	for (int m=0; m<sequence.num_sequence; m++)
+	for (int m=0; m<batch_size; m++)
 	{
-		layer_previous = sequence.sequence_list[m].layer_start;
+		layer_previous = sequence.sequence_list[b[m]].layer_start;
 		layer_current = layer_previous->layer_next;
 
 		while (layer_current!=NULL)
@@ -30,32 +30,32 @@ void annlCalculateGradient (annlSequence sequence)
 		}
 	}
 
-	for (int m=0; m<sequence.num_sequence; m++)
+	for (int m=0; m<batch_size; m++)
 	{
 		// Set up the input layers.
-		for (int i=0; i<sequence.sequence_list[m].num_layer_input; i++)
+		for (int i=0; i<sequence.sequence_list[b[m]].num_layer_input; i++)
 		{
-			memcpy (sequence.sequence_list[m].layer_input_list[i].layer_input->x,
-				sequence.sequence_list[m].layer_input_list[i].input_values,
-				sizeof(double)*(sequence.sequence_list[m].layer_input_list[i].layer_input->size));
+			memcpy (sequence.sequence_list[b[m]].layer_input_list[i].layer_input->x,
+				sequence.sequence_list[b[m]].layer_input_list[i].input_values,
+				sizeof(double)*(sequence.sequence_list[b[m]].layer_input_list[i].layer_input->size));
 		}
 
 		// Calculate the outputs.
-		layer_output = annlCalculateOutput (sequence.sequence_list[m].layer_start);
+		layer_output = annlCalculateOutput (sequence.sequence_list[b[m]].layer_start);
 
 		layer_current = layer_output;
 		layer_previous = layer_current->layer_previous;
 
 		// Set the derivatives of the error with respect to the outputs.
-		for (int j=0; j<sequence.sequence_list[m].num_layer_output; j++)
+		for (int j=0; j<sequence.sequence_list[b[m]].num_layer_output; j++)
 		{
-			for (int i=0; i<sequence.sequence_list[m].layer_output_list[j].layer_output->size; i++)
+			for (int i=0; i<sequence.sequence_list[b[m]].layer_output_list[j].layer_output->size; i++)
 			{
-				sequence.sequence_list[m].layer_output_list[j].layer_output->dx[i] = annlCalculateLoss (0,
-									                             sequence.sequence_list[m].layer_output_list[j].output_values,
-									                             sequence.sequence_list[m].layer_output_list[j].output_target,
-									                             sequence.sequence_list[m].layer_output_list[j].output_target_fit,
-									                             DERIVATIVE, i);
+				sequence.sequence_list[b[m]].layer_output_list[j].layer_output->dx[i] = annlCalculateLoss (0,
+									                                sequence.sequence_list[b[m]].layer_output_list[j].output_values,
+									                                sequence.sequence_list[b[m]].layer_output_list[j].output_target,
+									                                sequence.sequence_list[b[m]].layer_output_list[j].output_target_fit,
+									                                DERIVATIVE, i);
 			}
 		}
 
