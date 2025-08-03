@@ -111,6 +111,8 @@
 #define MIDDLE_2_SIZE 13
 #define MIDDLE_3_SIZE 13
 
+void status (int epoch, double loss);
+
 int main (int argc, char *argv[])
 {
 	// These are loop indices.
@@ -340,26 +342,43 @@ int main (int argc, char *argv[])
 		sequence_output[i].output_target_fit = &list[i][13];
 	}
 
-	int epoch = 0;
-	double loss_test;
-
-	// Check if the total loss is greater than loss_diff.
-	while ( (loss_test=annlCalculateLossTotal (sequence)) > loss_diff )
-	{
-		printf("Epoch = %d, Loss = %lf\n", epoch++, loss_test);
-
-		// Calculate the gradient.
-		annlCalculateGradient (sequence);
-
-		// Update the parameters.
-		annlUpdateParameters (layer_input, step);
-	}
+	// Train the network.
+	annlTrain (sequence, layer_input, loss_diff, 128, NULL, step, status);
 
 	// Print the outputs.
 	for (i=0; i<NUM; i++)
 	{
-		printf ("Hex digit = %c; Input = (%d,%d,%d,%d,%d,%d,%d); θ[Output-1/2] = (%d,%d,%d,%d,%d); Target = (%c,%c,%c,%c,%c); Output = (%lf,%lf,%lf,%lf,%lf)\n", *(hex_digit_all+i), (int)(*(input_all+7*i+0)), (int)(*(input_all+7*i+1)), (int)(*(input_all+7*i+2)), (int)(*(input_all+7*i+3)), (int)(*(input_all+7*i+4)), (int)(*(input_all+7*i+5)), (int)(*(input_all+7*i+6)), annlHeavisideTheta(*(output_all+5*i+0)-0.5), annlHeavisideTheta(*(output_all+5*i+1)-0.5), annlHeavisideTheta(*(output_all+5*i+2)-0.5), annlHeavisideTheta(*(output_all+5*i+3)-0.5), annlHeavisideTheta(*(output_all+5*i+4)-0.5), *(output_target_char_all+5*i+0), *(output_target_char_all+5*i+1), *(output_target_char_all+5*i+2), *(output_target_char_all+5*i+3), *(output_target_char_all+5*i+4), *(output_all+5*i+0), *(output_all+5*i+1), *(output_all+5*i+2), *(output_all+5*i+3), *(output_all+5*i+4));
+		printf ("Hex digit = %c; Input = (%d,%d,%d,%d,%d,%d,%d); θ[Output-1/2] = (%d,%d,%d,%d,%d); Target = (%c,%c,%c,%c,%c); Output = (%lf,%lf,%lf,%lf,%lf)\n",
+		        *(hex_digit_all+i),
+			(int)(*(input_all+7*i+0)),
+			(int)(*(input_all+7*i+1)),
+			(int)(*(input_all+7*i+2)),
+			(int)(*(input_all+7*i+3)),
+			(int)(*(input_all+7*i+4)),
+			(int)(*(input_all+7*i+5)),
+			(int)(*(input_all+7*i+6)),
+			annlHeavisideTheta(*(output_all+5*i+0)-0.5),
+			annlHeavisideTheta(*(output_all+5*i+1)-0.5),
+			annlHeavisideTheta(*(output_all+5*i+2)-0.5),
+			annlHeavisideTheta(*(output_all+5*i+3)-0.5),
+			annlHeavisideTheta(*(output_all+5*i+4)-0.5),
+			*(output_target_char_all+5*i+0),
+			*(output_target_char_all+5*i+1),
+			*(output_target_char_all+5*i+2),
+			*(output_target_char_all+5*i+3),
+			*(output_target_char_all+5*i+4),
+			*(output_all+5*i+0),
+			*(output_all+5*i+1),
+			*(output_all+5*i+2),
+			*(output_all+5*i+3),
+			*(output_all+5*i+4));
 	}
 
 	return 0;
+}
+
+void status (int epoch, double loss)
+{
+	printf("Epoch = %d, Loss = %lf\n", epoch, loss);
+	return;
 }
