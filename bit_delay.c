@@ -8,7 +8,8 @@
 #include "annl.h"
 
 #define NUM 1
-#define MIDDLE_SIZE 2
+
+void status (int epoch, double loss);
 
 int main (int argc, char *argv[])
 {
@@ -338,26 +339,68 @@ int main (int argc, char *argv[])
 		sequence_output[15].output_target_fit = &list[i][48];
 	}
 
-	int epoch = 0;
-	double loss_test;
-
-	// Check if the total loss is greater than loss_diff.
-	while ( (loss_test=annlCalculateLossTotal (sequence)) > loss_diff )
-	{
-		printf("Epoch = %d, Loss = %lf\n", epoch++, loss_test);
-
-		// Calculate the gradient.
-		annlCalculateGradient (sequence);
-
-		// Update the parameters.
-		annlUpdateParameters (layer_input_0, step);
-	}
+	// Train the network.
+	annlTrain (sequence, layer_input_0, loss_diff, 1, NULL, step, status);
 
 	// Print the outputs.
 	for (i=0; i<NUM; i++)
 	{
-		printf ("Input = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d); θ[Output-1/2] = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d); Output = (%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf)\n", (int)(*(input_all+1*i+0)), (int)(*(input_all+1*i+1)), (int)(*(input_all+1*i+2)), (int)(*(input_all+1*i+3)), (int)(*(input_all+1*i+4)), (int)(*(input_all+1*i+5)), (int)(*(input_all+1*i+6)), (int)(*(input_all+1*i+7)), (int)(*(input_all+1*i+8)), (int)(*(input_all+1*i+9)), (int)(*(input_all+1*i+10)), (int)(*(input_all+1*i+11)), (int)(*(input_all+1*i+12)), (int)(*(input_all+1*i+13)), (int)(*(input_all+1*i+14)), (int)(*(input_all+1*i+15)), annlHeavisideTheta(*(output_all+1*i+0)-0.5), annlHeavisideTheta(*(output_all+1*i+1)-0.5), annlHeavisideTheta(*(output_all+1*i+2)-0.5), annlHeavisideTheta(*(output_all+1*i+3)-0.5), annlHeavisideTheta(*(output_all+1*i+4)-0.5), annlHeavisideTheta(*(output_all+1*i+5)-0.5), annlHeavisideTheta(*(output_all+1*i+6)-0.5), annlHeavisideTheta(*(output_all+1*i+7)-0.5), annlHeavisideTheta(*(output_all+1*i+8)-0.5), annlHeavisideTheta(*(output_all+1*i+9)-0.5), annlHeavisideTheta(*(output_all+1*i+10)-0.5), annlHeavisideTheta(*(output_all+1*i+11)-0.5), annlHeavisideTheta(*(output_all+1*i+12)-0.5), annlHeavisideTheta(*(output_all+1*i+13)-0.5), annlHeavisideTheta(*(output_all+1*i+14)-0.5), annlHeavisideTheta(*(output_all+1*i+15)-0.5), *(output_all+1*i+0), *(output_all+1*i+1), *(output_all+1*i+2), *(output_all+1*i+3), *(output_all+1*i+4), *(output_all+1*i+5), *(output_all+1*i+6), *(output_all+1*i+7), *(output_all+1*i+8), *(output_all+1*i+9), *(output_all+1*i+10), *(output_all+1*i+11), *(output_all+1*i+12), *(output_all+1*i+13), *(output_all+1*i+14), *(output_all+1*i+15));
+		printf ("Input = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d); θ[Output-1/2] = (%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d); Output = (%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf)\n",
+		        (int)(*(input_all+1*i+0)),
+			(int)(*(input_all+1*i+1)),
+			(int)(*(input_all+1*i+2)),
+			(int)(*(input_all+1*i+3)),
+			(int)(*(input_all+1*i+4)),
+			(int)(*(input_all+1*i+5)),
+			(int)(*(input_all+1*i+6)),
+			(int)(*(input_all+1*i+7)),
+			(int)(*(input_all+1*i+8)),
+			(int)(*(input_all+1*i+9)),
+			(int)(*(input_all+1*i+10)),
+			(int)(*(input_all+1*i+11)),
+			(int)(*(input_all+1*i+12)),
+			(int)(*(input_all+1*i+13)),
+			(int)(*(input_all+1*i+14)),
+			(int)(*(input_all+1*i+15)),
+			annlHeavisideTheta(*(output_all+1*i+0)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+1)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+2)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+3)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+4)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+5)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+6)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+7)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+8)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+9)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+10)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+11)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+12)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+13)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+14)-0.5),
+			annlHeavisideTheta(*(output_all+1*i+15)-0.5),
+			*(output_all+1*i+0),
+			*(output_all+1*i+1),
+			*(output_all+1*i+2),
+			*(output_all+1*i+3),
+			*(output_all+1*i+4),
+			*(output_all+1*i+5),
+			*(output_all+1*i+6),
+			*(output_all+1*i+7),
+			*(output_all+1*i+8),
+			*(output_all+1*i+9),
+			*(output_all+1*i+10),
+			*(output_all+1*i+11),
+			*(output_all+1*i+12),
+			*(output_all+1*i+13),
+			*(output_all+1*i+14),
+			*(output_all+1*i+15));
 	}
 
 	return 0;
+}
+
+void status (int epoch, double loss)
+{
+	printf("Epoch = %d, Loss = %lf\n", epoch, loss);
+	return;
 }
