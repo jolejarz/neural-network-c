@@ -20,6 +20,7 @@ The library is contained in the following source files. The functions that are i
 * **output.c**: Calculating the Set of Outputs for a Given Set of Inputs
 * **randomization.c**: Randomizing the Weight and Bias Parameters Before Training Begins
 * **sequence.c**: Setting the Execution Sequence for Calculating the Outputs
+* **training.c**: Training a Network
 
 # Functions
 
@@ -136,10 +137,10 @@ This function sets up `annlLayer *layer_current` as a pooling layer. It is conne
 ## Gradient Functions
 
 ```
-void annlCalculateGradient (annlSequence sequence)
+void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
 ```
 
-This function calculates the gradient of the loss function. `annlSequence sequence` is a structure specifying all execution sequences.
+This function calculates the gradient of the loss function. `annlSequence sequence` is a structure specifying all execution sequences, `int batch_size` is the size of each batch, and `int b[]` is an array specifying the execution sequences in the current batch.
 
 ```
 void annlCalculateGradient_omp (annlSequence sequence)
@@ -327,6 +328,20 @@ void annlLinkSequence (annlLayer *layer_previous, annlLayer *layer_next)
 
 This function connects two layers and is used for setting the execution sequence. Once the outputs in layer `annlLayer *layer_previous` have been calculated, the execution proceeds to layer `annlLayer *layer_next`.
 
+## Training Functions
+
+```
+void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double))
+```
+
+This function trains a network. `annlSequence sequence` is a structure specifying all execution sequences, `annlLayer *layer_input` is the input layer, `double loss_diff` is the targeted upper bound on the loss function for training, `int batch_size` is the size of each batch, `gsl_rng *rng` is a GSL random number generator structure, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
+
+```
+void annlTrain_omp (annlSequence sequence, double loss_diff, double step, void (*status)(int,double))
+```
+
+This function trains a network. It is used for multithreaded parallelization. `annlSequence sequence` is a structure specifying all execution sequences, `double loss_diff` is the targeted upper bound on the loss function for training, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
+
 # Examples
 
 Several examples demonstrating the use of the library have been completed.
@@ -337,11 +352,11 @@ In the file **xor.c**, we train the XOR logic gate using a simple network with o
 
 ## Seven-Segment Display
 
-The seven-segment display is a ubiquitous device for rendering the ten decimal digits 0 through 9. For the purposes of this example, consider a seven-segment display as rendering the sixteen hexadecimal digits 0 through 9 and A through F. Since there are seven segments to the display, and since each segment can be either lit or not lit, each hexadecimal digit's representation on the display can be specified as a sequence of seven bits. We would like to train a neural network to convert the seven-bit representation of the hexadecimal digit from the display to the same digit's four-bit binary representation. The network that we use is a four-layer perceptron, where each of the three hidden layers contains thirteen units. The output layer contains five units, where one unit is an indicator and is equal to zero if the input vector maps onto one of the sixteen hexadecimal digits and one otherwise. If the indicator unit equals zero, then the remaining four units of the output vector encode the hexadecimal digit's binary representation. The construction and training of the network is done in the file **seven-segment_display.c**.
+The seven-segment display is a ubiquitous device for rendering the ten decimal digits 0 through 9. For the purposes of this example, consider a seven-segment display as rendering the sixteen hexadecimal digits 0 through 9 and A through F. Since there are seven segments to the display, and since each segment can be either lit or not lit, each hexadecimal digit's representation on the display can be specified as a sequence of seven bits. We would like to train a neural network to convert the seven-bit representation of the hexadecimal digit from the display to the same digit's four-bit binary representation. The network that we use is a four-layer perceptron, where each of the three hidden layers contains thirteen units. The output layer contains five units, where one unit is an indicator and is equal to zero if the input vector maps onto one of the sixteen hexadecimal digits and one otherwise. If the indicator unit equals zero, then the remaining four units of the output vector encode the hexadecimal digit's binary representation. The construction and training of the network is done using full-batch gradient descent in the file **seven-segment_display.c**. In the file **seven-segment_display_mb.c**, mini-batch gradient descent is performed, where each batch consists of sixteen input-output pairs.
 
 ## LeNet5 Architecture
 
-As a simple example that uses the library for computer vision, in the file **LeNet5.c**, we construct ten input-output pairs, where each input matrix is a 32x32 image representing one of the ten decimal digits. We then train the model to classify each manually written image as one of the ten decimal digits. The file **LeNet5_omp.c** performs the same training with multithreaded parallelization using OpenMP.
+As a simple example that uses the library for computer vision, in the file **LeNet5.c**, we construct ten input-output pairs, where each input matrix is a 32x32 image representing one of the ten decimal digits. We then train the model to classify each manually written image as one of the ten decimal digits. The file **LeNet5_omp.c** performs the same training with multithreaded parallelization using OpenMP, and the file **LeNet5_sgd.c** uses stochastic gradient descent.
 
 ## One-Unit Time Delay
 
