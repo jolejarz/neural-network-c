@@ -461,7 +461,7 @@ int main (int argc, char *argv[])
 	}
 
 	// Train the network.
-	annlTrain (sequence, layer_input, loss_diff, 1, rng_mt, step, status);
+	annlTrain (sequence, layer_input, annlCalculateLossSquaredError, loss_diff, 1, rng_mt, step, status);
 
 	// Print the outputs.
 	for (i=0; i<NUM; i++)
