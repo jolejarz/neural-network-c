@@ -495,7 +495,7 @@ int main (int argc, char *argv[])
 	}
 
 	// Train the network.
-	annlTrain_omp (sequence, loss_diff, step, status);
+	annlTrain_omp (sequence, annlCalculateLossSquaredError, loss_diff, step, status);
 
 	// Print the outputs.
 	for (i=0; i<NUM; i++)
