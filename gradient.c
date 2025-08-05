@@ -1,4 +1,4 @@
-void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
+void annlCalculateGradient (annlSequence sequence, int batch_size, int b[], double (*loss_function)(int,double*,double*,double*,int,int))
 {
 	int i, j, i_max, j_max, layer_w_index;
 
@@ -51,7 +51,7 @@ void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
 		{
 			for (int i=0; i<sequence.sequence_list[b[m]].layer_output_list[j].layer_output->size; i++)
 			{
-				sequence.sequence_list[b[m]].layer_output_list[j].layer_output->dx[i] = annlCalculateLoss (0,
+				sequence.sequence_list[b[m]].layer_output_list[j].layer_output->dx[i] = (*loss_function) (0,
 									                                sequence.sequence_list[b[m]].layer_output_list[j].output_values,
 									                                sequence.sequence_list[b[m]].layer_output_list[j].output_target,
 									                                sequence.sequence_list[b[m]].layer_output_list[j].output_target_fit,
@@ -81,7 +81,7 @@ void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
 	return layer_previous;
 }
 
-void annlCalculateGradient_omp (annlSequence sequence)
+void annlCalculateGradient_omp (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int))
 {
 	int i, j, i_max, j_max, layer_w_index;
 
@@ -136,7 +136,7 @@ void annlCalculateGradient_omp (annlSequence sequence)
 		{
 			for (int i=0; i<sequence.sequence_list[m].layer_output_list[j].layer_output->size; i++)
 			{
-				sequence.sequence_list[m].layer_output_list[j].layer_output->dx[i] = annlCalculateLoss (0,
+				sequence.sequence_list[m].layer_output_list[j].layer_output->dx[i] = (*loss_function) (0,
 									                             sequence.sequence_list[m].layer_output_list[j].output_values,
 									                             sequence.sequence_list[m].layer_output_list[j].output_target,
 									                             sequence.sequence_list[m].layer_output_list[j].output_target_fit,
