@@ -24,5 +24,5 @@ LeNet5_sgd: LeNet5_sgd.c annl.o
 bit_delay: bit_delay.c annl.o
 	${CC} -o bit_delay bit_delay.c annl.o ${end}
 
-annl.o: annl.c
+annl.o: annl.h annl.c activation.c bias.c connection.c gradient.c integration.c layer.c loss.c output.c randomization.c sequence.c training.c
 	${CC} -o annl.o -c annl.c ${end}
