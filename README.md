@@ -137,16 +137,16 @@ This function sets up `annlLayer *layer_current` as a pooling layer. It is conne
 ## Gradient Functions
 
 ```
-void annlCalculateGradient (annlSequence sequence, int batch_size, int b[])
+void annlCalculateGradient (annlSequence sequence, int batch_size, int b[], double (*loss_function)(int,double*,double*,double*,int,int))
 ```
 
-This function calculates the gradient of the loss function. `annlSequence sequence` is a structure specifying all execution sequences, `int batch_size` is the size of each batch, and `int b[]` is an array specifying the execution sequences in the current batch.
+This function calculates the gradient of the loss function. `annlSequence sequence` is a structure specifying all execution sequences, `int batch_size` is the size of each batch, `int b[]` is an array specifying the execution sequences in the current batch, and `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function.
 
 ```
-void annlCalculateGradient_omp (annlSequence sequence)
+void annlCalculateGradient_omp (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int))
 ```
 
-This function calculates the gradient of the loss function. It is used for multithreaded parallelization. `annlSequence sequence` is a structure specifying all execution sequences.
+This function calculates the gradient of the loss function. It is used for multithreaded parallelization. `annlSequence sequence` is a structure specifying all execution sequences, and `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function.
 
 ```
 void annlCalcFull_db (annlLayer *layer_current)
@@ -257,22 +257,28 @@ This function creates a new layer and returns a pointer to the corresponding lay
 ## Loss Functions
 
 ```
-double annlCalculateLoss (int output_size, double *output, double *output_target, double *output_target_fit, int derivative, int derivative_index)
+double annlCalculateLossSquaredError (int output_size, double *output, double *output_target, double *output_target_fit, int derivative, int derivative_index)
 ```
 
 This is the squared error loss function. `int output_size` is the number of units in the output layer, `double *output` is the output layer, and `double *output_target` is the target output layer. A particular unit in the output layer is included in the calculation of loss if and only if the corresponding element in `double *output_target_fit` is set to 1. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the loss function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the loss function with respect to the output unit specified by `int derivative_index` is returned.
 
 ```
-double annlCalculateLossTotal (annlSequence sequence)
+double annlCalculateLossCrossEntropy (int output_size, double *output, double *output_target, double *output_target_fit, int derivative, int derivative_index)
 ```
 
-This function calculates the total loss from all execution sequences specified in `annlSequence sequence`.
+This is the cross-entropy loss function. `int output_size` is the number of units in the output layer, `double *output` is the output layer, and `double *output_target` is the target output layer. A particular unit in the output layer is included in the calculation of loss if and only if the corresponding element in `double *output_target_fit` is set to 1. For calculating outputs, `int derivative` is set to NO_DERIVATIVE, and the loss function is returned. For performing backpropagation, `int derivative` is set to DERIVATIVE, and the derivative of the loss function with respect to the output unit specified by `int derivative_index` is returned.
 
 ```
-double annlCalculateLossTotal_omp (annlSequence sequence)
+double annlCalculateLossTotal (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int))
 ```
 
-This function calculates the total loss from all execution sequences specified in `annlSequence sequence`. It is used for multithreaded parallelization.
+This function calculates the total loss from all execution sequences specified in `annlSequence sequence`. `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function.
+
+```
+double annlCalculateLossTotal_omp (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int))
+```
+
+This function calculates the total loss from all execution sequences specified in `annlSequence sequence`. It is used for multithreaded parallelization. `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function.
 
 ## Output Functions
 
@@ -331,16 +337,16 @@ This function connects two layers and is used for setting the execution sequence
 ## Training Functions
 
 ```
-void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double))
+void annlTrain (annlSequence sequence, annlLayer *layer_input, double (*loss_function)(int,double*,double*,double*,int,int), double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double))
 ```
 
-This function trains a network. `annlSequence sequence` is a structure specifying all execution sequences, `annlLayer *layer_input` is the input layer, `double loss_diff` is the targeted upper bound on the loss function for training, `int batch_size` is the size of each batch, `gsl_rng *rng` is a GSL random number generator structure, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
+This function trains a network. `annlSequence sequence` is a structure specifying all execution sequences, `annlLayer *layer_input` is the input layer, `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function, `double loss_diff` is the targeted upper bound on the loss function for training, `int batch_size` is the size of each batch, `gsl_rng *rng` is a GSL random number generator structure, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
 
 ```
-void annlTrain_omp (annlSequence sequence, double loss_diff, double step, void (*status)(int,double))
+void annlTrain_omp (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int), double loss_diff, double step, void (*status)(int,double))
 ```
 
-This function trains a network. It is used for multithreaded parallelization. `annlSequence sequence` is a structure specifying all execution sequences, `double loss_diff` is the targeted upper bound on the loss function for training, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
+This function trains a network. It is used for multithreaded parallelization. `annlSequence sequence` is a structure specifying all execution sequences, `double (*loss_function)(int,double*,double*,double*,int,int)` is a loss function, `double loss_diff` is the targeted upper bound on the loss function for training, `double step` is the step size, and `void (*status)(int,double))` is a function for printing status messages during training.
 
 # Examples
 
