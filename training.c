@@ -1,4 +1,4 @@
-void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double))
+void annlTrain (annlSequence sequence, annlLayer *layer_input, double (*loss_function)(int,double*,double*,double*,int,int), double loss_diff, int batch_size, gsl_rng *rng, double step, void (*status)(int,double))
 {
 	int epoch = 0;
 	double loss_test;
@@ -12,10 +12,10 @@ void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff,
 	double x;
 
 	// Check if the total loss is greater than or equal to loss_diff.
-	while ( (loss_test=annlCalculateLossTotal (sequence)) >= loss_diff )
+	while ( (loss_test=annlCalculateLossTotal (sequence, loss_function)) >= loss_diff )
 	{
 		// Print the status.
-		(*status) (epoch++, loss_test);
+		if (status!=NULL) (*status) (epoch++, loss_test);
 
 		// Set up the array for selecting sequences.
 		for (int i=0; i<sequence.num_sequence; i++) a[i]=i;
@@ -49,37 +49,37 @@ void annlTrain (annlSequence sequence, annlLayer *layer_input, double loss_diff,
 			}
 
 			// Calculate the gradient.
-			annlCalculateGradient (sequence, batch_size, b);
+			annlCalculateGradient (sequence, batch_size, b, loss_function);
 
 			// Update the parameters.
 			annlUpdateParameters (layer_input, step);
 		}
 	}
 	// Print the final status.
-	(*status) (epoch, loss_test);
+	if (status!=NULL) (*status) (epoch, loss_test);
 
 	return;
 }
 
-void annlTrain_omp (annlSequence sequence, double loss_diff, double step, void (*status)(int,double))
+void annlTrain_omp (annlSequence sequence, double (*loss_function)(int,double*,double*,double*,int,int), double loss_diff, double step, void (*status)(int,double))
 {
 	int epoch = 0;
 	double loss_test;
 
 	// Check if the total loss is greater than or equal to loss_diff.
-	while ( (loss_test=annlCalculateLossTotal_omp (sequence)) >= loss_diff )
+	while ( (loss_test=annlCalculateLossTotal_omp (sequence, loss_function)) >= loss_diff )
 	{
 		// Print the status.
-		(*status) (epoch++, loss_test);
+		if (status!=NULL) (*status) (epoch++, loss_test);
 
 		// Calculate the gradient.
-		annlCalculateGradient_omp (sequence);
+		annlCalculateGradient_omp (sequence, loss_function);
 
 		// Update the parameters.
 		annlUpdateParameters_omp (sequence, step);
 	}
 	// Print the final status.
-	(*status) (epoch, loss_test);
+	if (status!=NULL) (*status) (epoch, loss_test);
 
 	return;
 }
